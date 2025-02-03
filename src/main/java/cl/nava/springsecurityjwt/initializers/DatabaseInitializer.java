@@ -13,15 +13,15 @@ import org.springframework.stereotype.Component;
 import java.util.Collections;
 
 @Component
-@Order(2)
-public class AdminInitializer implements CommandLineRunner {
+@Order(1) // Ensure it runs early in the app startup
+public class DatabaseInitializer implements CommandLineRunner {
 
     private final IRolesRepository rolesRepository;
     private final IUsersRepository usersRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AdminInitializer(IRolesRepository rolesRepository, IUsersRepository usersRepository, PasswordEncoder passwordEncoder) {
+    public DatabaseInitializer(IRolesRepository rolesRepository, IUsersRepository usersRepository, PasswordEncoder passwordEncoder) {
         this.rolesRepository = rolesRepository;
         this.usersRepository = usersRepository;
         this.passwordEncoder = passwordEncoder;
@@ -29,16 +29,36 @@ public class AdminInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        // Check if the role "ADMIN" exists, if not, it is created.
+        System.out.println("🚀 Database Initializer started...");
+
+        // Ensure roles exist
+        RolesModel adminRole = rolesRepository.findByName("ADMIN").orElseGet(() -> {
+            System.out.println("✅ Creating role 'ADMIN'");
+            RolesModel newRole = new RolesModel();
+            newRole.setName("ADMIN");
+            return rolesRepository.save(newRole);
+        });
+
+        RolesModel userRole = rolesRepository.findByName("USER").orElseGet(() -> {
+            System.out.println("✅ Creating role 'USER'");
+            RolesModel newRole = new RolesModel();
+            newRole.setName("USER");
+            return rolesRepository.save(newRole);
+        });
+
+        // Check if admin user already exists
         if (usersRepository.findByUserName("admin").isEmpty()) {
+            System.out.println("⚠️ Admin user not found, creating new admin user...");
+
             UsersModel adminUser = new UsersModel();
             adminUser.setUserName("admin");
             adminUser.setPassword(passwordEncoder.encode("admin"));
-            RolesModel adminRole = rolesRepository.findByName("ADMIN").orElseThrow(() -> new IllegalArgumentException("Role USER not found"));
             adminUser.setRoles(Collections.singletonList(adminRole));
+
             usersRepository.save(adminUser);
-            System.out.println("User 'ADMIN' created.");
+            System.out.println("🎉 Admin user created successfully!");
+        } else {
+            System.out.println("✅ Admin user already exists, skipping creation.");
         }
     }
-
 }
