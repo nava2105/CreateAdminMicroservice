@@ -44,5 +44,47 @@ services:
     ports:
       - "80:80"
 
+  third_app:
+    build: C:/Users/Mateo/Documents/UCE/2024 - 2025/distribuida/FinalProject/Authenticator/CreateUser/.
+    container_name: create_user_microservice
+    restart: always
+    depends_on:
+      mysql:
+        condition: service_healthy
+      app:
+        condition: service_started
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+
+  fourth_app:
+    build: C:/Users/Mateo/Documents/UCE/2024 - 2025/distribuida/FinalProject/Authenticator/GetUserFromToken/.
+    container_name: get_user_from_token_microservice
+    restart: always
+    depends_on:
+      mysql:
+        condition: service_healthy
+      app:
+        condition: service_started
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+
+  fifth_app:
+    build: C:/Users/Mateo/Documents/UCE/2024 - 2025/distribuida/FinalProject/Authenticator/ChangePassword/.
+    container_name: change_password_microservice
+    restart: always
+    depends_on:
+      mysql:
+        condition: service_healthy
+      app:
+        condition: service_started
+    env_file:
+      - .env
+    ports:
+      - "8078:8078"
+
 volumes:
   mysql_data:

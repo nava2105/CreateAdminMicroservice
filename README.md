@@ -1,4 +1,4 @@
-# nava2105/Spring-Security-JWT
+# CreateAdminMicroservice
 
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
 ![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
@@ -12,7 +12,8 @@
 4. [Installation](#installation)
 5. [Usage](#usage)
 6. [Endpoints](#endpoints)
-7. [Docker](#docker)
+7. [Database Schema](#database-schema)
+8. [Docker](#docker)
 
 ---
 
