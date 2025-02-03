@@ -12,6 +12,7 @@
 4. [Installation](#installation)
 5. [Usage](#usage)
 6. [Endpoints](#endpoints)
+7. [Docker](#docker)
 
 ---
 
@@ -67,17 +68,20 @@ Technologies used in this project:
 
 ### Steps to Run the Application:
 1. Clone this repository:
-   ```bash
-   git clone https://github.com/nava2105/Spring-Security-JWT.git
-   cd Spring-Security-JWT
-   ```
+   
 
 2. Configure the database:
-  - Update the `application.properties` file with your MySQL credentials:
-    ```properties
-    spring.datasource.url=jdbc:mysql://localhost:3306/your_database_name
-    spring.datasource.username=your_username
-    spring.datasource.password=your_password
+  - Create a `.env` file in the root folder of the repository with the database credentials:
+    ```properties 
+    MYSQL_DATABASE=ptrainer_users
+    MYSQL_USER=root
+    MYSQL_PASSWORD=Mmnsin210606?
+    SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/ptrainer_users?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    SPRING_DATASOURCE_USERNAME=root
+    SPRING_DATASOURCE_PASSWORD=Mmnsin210606?
+    DATABASE_URL=jdbc:mysql://localhost:3306/ptrainer_users?createDatabaseIfNotExist=true
+    DATABASE_USERNAME=root
+    DATABASE_PASSWORD=Mmnsin210606?
     ```
 
 1. Run the application:
@@ -85,24 +89,10 @@ Technologies used in this project:
    mvn spring-boot:run
    ```
 
-2. Access the application:
-  - Swagger API Documentation: [http://localhost:90/swagger-ui/index.html](http://localhost:90/swagger-ui/index.html)
-  - Token-protected endpoints: Use tools such as Postman or Curl.
-
 ---
 
 ## Usage
 Once the application is up and running, you can interact with the API by performing proper requests:
-
-### Register a User:
-- Endpoint: `/api/auth/register`
-- Payload:
-  ```json
-  {
-    "username": "your_username",
-    "password": "your_password"
-  }
-  ```
 
 ### Register an Admin (Admin Only):
 - Endpoint: `/api/auth/register/admin`
@@ -116,64 +106,12 @@ Once the application is up and running, you can interact with the API by perform
     "username": "admin_username",
     "password": "admin_password" 
   }
-  ```
-  
-### Login and Get JWT:
-- Endpoint: `/api/auth/login`
-- Payload:
-  ```json
-  {
-    "username": "your_username",
-    "password": "your_password"
-  }
-  ```
-- Response:
-  ```json
-  {
-    "accessToken": "your_jwt_token",
-    "tokenType": "Bearer"
-  }
-  ```
-
-### Validate Token:
-- Endpoint: `/api/auth/password/update`
-- Headers:
-  ```
-  Authorization: Bearer your_jwt_token
-  ```
-- Payload:
-  ```json
-  {
-    "password": "new_password"
-  }
-  ```
-
-### Get User Id From Token:
-- Endpoint: `/api/auth/user_id/token`
-- Headers:
-  ```
-  Authorization: Bearer your_jwt_token
-  ```
-- Payload:
-  ```json
-  {}
-  ```
+  ``` 
 
 ---
 
 ## Endpoints
 Below is a comprehensive list of the endpoints included in the project:
-
-### Public Endpoints (No Authentication Required)
-- **Register User**
-  - `POST /api/auth/register`  
-    Registers a user with the default `USER` role.
-
-- **Login**
-  - `POST /api/auth/login`  
-    Authenticates the user and returns a JWT.
-
----
 
 ### Protected Endpoints (Authentication Required)
 - **Register Admin**
@@ -181,35 +119,10 @@ Below is a comprehensive list of the endpoints included in the project:
   - Allows admin users to register new users with the `ADMIN` role.
   - Requires `ADMIN` privilege.
 
-- **Assign Role**
-  - `POST /api/auth/password/update`
-  - Allows users to update their password.
-  - Requires the JWT.
-
-- **Get User Id From Token**
-  - `GET /api/auth/user_id/token`
-  - Allows other APIs to validate the validity of the token.
-  - Requires the JWT.
-
 ---
-
-## Environment Variables
-Below is the structure for the `.env` file, which contains the environment variables for configuring the database:
-
-| **Variable**      | **Description**                  | **Example**                             |
-|-------------------|----------------------------------|-----------------------------------------|
-| DATABASE_USERNAME | Username for the database        | root                                    |
-| DATABASE_PASSWORD | Password for the database        | password?                               |
-| DATABASE_URL      | JDBC URL for connecting to MySQL | jdbc:mysql://localhost:3307/table_users |
----
-
-## Configuration and Notes
-- **Application Properties**:
-  - Located in the `src/main/resources/application.properties` file.
-  - Ensure to set up database credentials correctly before running the app.
 
 - **Security**:
-  - `JWT_EXPIRATION_TOKEN` is defined (default: 600 seconds).
+  - `JWT_EXPIRATION_TOKEN` is defined (default: 30 minutes).
   - Modify as required in `SecurityConstants.java`.
 
 ---
@@ -240,3 +153,7 @@ The project uses the following schema for roles and users:
 | role_id    | Long (Primary) |
 
 ---
+
+## Docker
+
+To use the `docker-compose.yml` file, change the paths of the other microservices defined in it depending where you have it stored
